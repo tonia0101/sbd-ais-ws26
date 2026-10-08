@@ -2,19 +2,15 @@ package main
 
 import "fmt"
 
-type Person struct {
-	Name    string
-	Message string
+type Message struct {
+	Text string
 }
 
-func (p Person) Greet() {
-	fmt.Printf("Hello World! %s says: '%s'\n", p.Name, p.Message)
+func (m Message) Print() {
+	fmt.Println(m.Text)
 }
 
 func main() {
-	user := Person{
-		Name:    "Antonia",
-		Message: "Hiii",
-	}
-	user.Greet()
+	m := Message{Text: "Hello World!"}
+	m.Print()
 }
