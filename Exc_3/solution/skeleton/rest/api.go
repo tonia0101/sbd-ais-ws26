@@ -1,7 +1,9 @@
 package rest
 
 import (
+	"encoding/json"
 	"net/http"
+	"ordersystem/model"
 	"ordersystem/repository"
 
 	"github.com/go-chi/render"
@@ -60,6 +62,15 @@ func PostOrder(db *repository.DatabaseHandler) http.HandlerFunc {
 		// err := json.NewDecoder(r.Body).Decode(&<your-order-struct>)
 		// handle error and render Status 400
 		// add to db
+		var order model.Order
+		err := json.NewDecoder(r.Body).Decode(&order)
+		if err != nil {
+			render.Status(r, http.StatusBadRequest)
+			render.JSON(w, r, "Invalid Order!")
+			return
+		}
+		db.AddOrder((&order))
+
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, "ok")
 	}
