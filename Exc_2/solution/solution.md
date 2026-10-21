@@ -170,4 +170,4 @@ Writing a better query O(N) is much more effective than using faster hardware or
 
 If the company really needs all 11 billion rows we either need to scale-up (use a bigger machine) or Scale-out (Cluster). Even with these solutions it might still be a problem due to the size of the data.
 
-Limits of OLTP database for this database: PostgreSQL is an OLTP database. It is built for quick, everyday transactions and not meant for such big calculations. If we run huge self-joins on the main database, it uses up all the CPU and slows down the system for regular users. For this kind of heavy analytical work, we should copy the data to a specialized OLAP database (like Snowflake) instead.
+Limits of OLTP database for this database: PostgreSQL is an OLTP database. It is built for quick, everyday transactions and not meant for such big calculations. If we run huge self-joins on the main database, it uses up all the CPU and slows down the system for regular users. For this kind of heavyS work, we should copy the data to a specialized OLAP database (like Snowflake) instead.
