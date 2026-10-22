@@ -68,4 +68,18 @@ paths:
           description: Bad Request
       tags:
       - Order
+  /api/order/all:
+    get:
+      description: Returns the orders of all drinks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Drink'
+            type: array
+      tags:
+      - Menu
 swagger: "2.0"

@@ -29,6 +29,12 @@ func GetMenu(db *repository.DatabaseHandler) http.HandlerFunc {
 }
 
 // todo create GetOrders /api/order/all
+// GetOrders 		godoc
+// @tags 			Menu
+// @Description 	Returns the orders of all drinks
+// @Produce  		json
+// @Success 		200 {array} model.Drink
+// @Router 			/api/order/all [get]
 func GetOrders(db *repository.DatabaseHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orders := db.GetOrders()

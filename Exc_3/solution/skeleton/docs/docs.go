@@ -71,6 +71,28 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/order/all": {
+            "get": {
+                "description": "Returns the orders of all drinks",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Drink"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
