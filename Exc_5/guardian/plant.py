@@ -95,11 +95,18 @@ class KafkaSink:
         self.producer = Producer({
             "bootstrap.servers": args.bootstrap,
             # TODO: more settings?
+            "enable.idempotence": True, # retries cannot duplicate or reorder
+            "linger.ms": 10,               # small batches, no flush per reading
+            "compression.type": "lz4",
         })
 
     def send(self, reading):
         # TODO: send the reading (as JSON) to Kafka: self.producer.produce(...)
-        raise NotImplementedError("KafkaSink.send() is part of your solution (Stage C1)")
+        try:
+            self.producer.produce("readings", key=reading["machine_id"], value=json.dumps(reading))
+        except BufferError:
+            self.producer.poll(0.5)
+            self.producer.produce("readings", key=reading["machine_id"], value=json.dumps(reading))
 
     def tick(self):
         """Called once per tick, after all readings of that tick were sent."""
