@@ -154,6 +154,13 @@ Reference numbers: lab = 60 machines x 10 Hz = 600 readings/s (about 52 million 
 
 Rollout = 2,000 machines x 50 Hz = 100,000 readings/s (about 8.6 billion rows/day).
 
+| | Requirement |
+|---|---|
+| R1 | **Scale:** 600 readings/s in the lab; the design must grow to 100,000 readings/s. |
+| R2 | **Complete and ordered:** the model gets *every* reading of a machine, in `seq` order (the model counts `missing` and `out-of-order` readings). |
+| R3 | **Fresh:** anomalies at most 5 s (p95) after the reading, at full rate. |
+| R4 | **Independent consumers:** the raw readings also feed a training-data archive and a live dashboard. Adding a consumer must not slow down, change or break the others, and must not add load to PostgreSQL. |
+
 #### R1 Scale 
 - **Option 1 (PostgreSQL + more pollers): at risk.**
   - One database has to ingest 100,000 INSERTs/s, maintain the indexes on every insert, and answer many polling SELECTs at the same time. It can only scale vertically.
@@ -178,10 +185,6 @@ Rollout = 2,000 machines x 50 Hz = 100,000 readings/s (about 8.6 billion rows/da
 
 - **Option 2: met.**
   - Key = `machine_id`, so all readings of a machine go to one partition, in the order they were produced, and one consumer per group reads that partition. The model sees every reading in `seq` order.
-
-  - Needs sane producer settings: no `flush()` per reading, and idempotence so retries cannot duplicate or reorder messages.
-
-  - Risk: if a partition moves to another detector instance (rebalance), the per-machine model state does not move with it. The detector must handle that.
 
 #### R3 Fresh (anomaly within 5 s, p95)
 - **Option 1: at risk.**
